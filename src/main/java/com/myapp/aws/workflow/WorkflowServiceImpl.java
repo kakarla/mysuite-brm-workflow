@@ -14,15 +14,18 @@ import java.util.Map;
 import java.util.Set;
 
 public class WorkflowServiceImpl implements IWorkflowService{
-    static final String RULE_NAME = "ruleName";
-    static final String MYEXPOSURES_RULE_NAME = "MyExposureApprovalRules";
-    static final String MYEXPOSURES_FILE_NAME = "MyExposures_ApprovalRules_QA.xls";
+    static final String APP_NAME = "appName";
+    static final String MODULE_NAME = "module";
+    static final String MYEXPOSURES_APP = "MyExposures";
+    static final String MYEXPOSURES_MODULE_WF = "ExpWFRules";
+    static final String MYEXPOSURES_FILE_NAME_WF = "MyExposures_ApprovalRules_QA.xls";
 
     @Override
     public Map<String, String> processRules(Map<String, String> mapa) {
-        String ruleName = mapa.get(RULE_NAME);
-        if(mapa.get(RULE_NAME) != null){
-            String fileName = getFileName(ruleName);
+        String appName = mapa.get(APP_NAME);
+        String moduleName = mapa.get(MODULE_NAME);
+        if(mapa.get(APP_NAME) != null){
+            String fileName = getFileName(appName, moduleName);
             if(fileName != null){
                 S3Util s3Util = new S3Util();
                 byte[] bytes = s3Util.getRulesFile(fileName);
@@ -32,10 +35,10 @@ public class WorkflowServiceImpl implements IWorkflowService{
         return  mapa;
     }
 
-    private String getFileName(String ruleName){
+    private String getFileName(String appName, String moduleName){
         String fileName = null;
-        if(ruleName.equalsIgnoreCase(MYEXPOSURES_RULE_NAME)){
-            fileName = MYEXPOSURES_FILE_NAME;
+        if(appName.equalsIgnoreCase(MYEXPOSURES_APP) && moduleName.equalsIgnoreCase(MYEXPOSURES_MODULE_WF)){
+            fileName = MYEXPOSURES_FILE_NAME_WF;
         }
         return  fileName;
     }

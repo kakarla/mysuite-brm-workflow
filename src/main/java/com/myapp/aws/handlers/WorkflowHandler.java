@@ -37,7 +37,7 @@ public class WorkflowHandler implements RequestHandler<APIGatewayProxyRequestEve
             String responseJson = processRequest(path, params);
             if(responseJson == null){
                 response.setStatusCode(404);
-                response.setBody("Unable to process request");
+                response.setBody("Unable to process request: Unknown endpoint");
             }
             response.setBody(responseJson);
 
@@ -46,7 +46,7 @@ public class WorkflowHandler implements RequestHandler<APIGatewayProxyRequestEve
 
         }else{
             response.setStatusCode(404);
-            response.setBody("Unable to process request");
+            response.setBody("Unable to process request: Empty params");
         }
 
         HashMap<String, String> headers = new HashMap<String, String>();

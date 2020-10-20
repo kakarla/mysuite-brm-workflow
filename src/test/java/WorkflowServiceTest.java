@@ -29,7 +29,8 @@ public class WorkflowServiceTest extends AbstractTest{
         WorkflowServiceImpl service = new WorkflowServiceImpl();
 
         Map<String, String> mapa = new HashMap<String, String>();
-        mapa.put("ruleName", "MyExposureApprovalRules");
+        mapa.put("appName", "MyExposures");
+        mapa.put("module", "ExpWFRules");
         mapa.put("umbrella", "test");
         mapa.put("notionalAmt", "100");
         mapa.put("maturityBucket", "100");
