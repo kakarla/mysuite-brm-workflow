@@ -21,14 +21,14 @@ public class WorkflowServiceImpl implements IWorkflowService{
     static final String MYEXPOSURES_FILE_NAME_WF = "MyExposures_ApprovalRules_QA.xls";
 
     @Override
-    public Map<String, String> processRules(Map<String, String> mapa) {
+    public Map<String, String> processRules(String s3_bucket_name, Map<String, String> mapa) {
         String appName = mapa.get(APP_NAME);
         String moduleName = mapa.get(MODULE_NAME);
         if(mapa.get(APP_NAME) != null){
             String fileName = getFileName(appName, moduleName);
             if(fileName != null){
                 S3Util s3Util = new S3Util();
-                byte[] bytes = s3Util.getRulesFile(fileName);
+                byte[] bytes = s3Util.getRulesFile(s3_bucket_name, fileName);
                 processDrools(bytes, mapa);
             }
         }

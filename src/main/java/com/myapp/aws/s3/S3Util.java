@@ -21,37 +21,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class S3Util {
-    private static String bucketName = "kkaws-brm-bucket";
     private static AmazonS3 s3 = AmazonS3ClientBuilder.standard()
             .withRegion(Regions.US_EAST_1)
-            .build();;
+            .build();
 
-    public static void main(String[] args) throws IOException {
-        try {
-
-            WorkflowServiceImpl service = new WorkflowServiceImpl();
-
-            Map<String, String> mapa = new HashMap<String, String>();
-            mapa.put("appName", "MyExposures");
-            mapa.put("module", "ExpWFRules");
-            mapa.put("umbrella", "test");
-            mapa.put("notionalAmt", "100");
-            mapa.put("maturityBucket", "100");
-
-            Map<String, String> result = service.processRules(mapa);
-            System.out.println("Returned Search criteria: " +  result);
-        } catch (AmazonServiceException e) {
-            System.err.println(e.getErrorMessage());
-            System.exit(1);
-        }
-    }
-
-    public void uploadRulesFile(String filePath, String fileName) {
+    public void uploadRulesFile(String s3_bucket_name, String filePath, String fileName) {
         Instant start = Instant.now();
         try{
             File fileToUpload = new File(filePath + fileName);
             System.out.println("Object upload started");
-            PutObjectResult s3Result = s3.putObject(bucketName, fileName, fileToUpload);
+            PutObjectResult s3Result = s3.putObject(s3_bucket_name, fileName, fileToUpload);
 
             /*TransferManager tm = TransferManagerBuilder.standard()
                     .withS3Client(s3)
@@ -75,7 +54,7 @@ public class S3Util {
         printTimeTaken(start, "Time take for uploadRulesFile: ");
     }
 
-    public byte[] getRulesFile(String fileName) {
+    public byte[] getRulesFile(String s3_bucket_name, String fileName) {
         Instant start = Instant.now();
         S3Object headerOverrideObject = null;
 
@@ -87,7 +66,7 @@ public class S3Util {
             ResponseHeaderOverrides headerOverrides = new ResponseHeaderOverrides()
                     .withCacheControl("No-cache")
                     .withContentDisposition("attachment; filename=example.txt");
-            GetObjectRequest getObjectRequestHeaderOverride = new GetObjectRequest(bucketName, fileName)
+            GetObjectRequest getObjectRequestHeaderOverride = new GetObjectRequest(s3_bucket_name, fileName)
                     .withResponseHeaders(headerOverrides);
             headerOverrideObject = s3.getObject(getObjectRequestHeaderOverride);
 

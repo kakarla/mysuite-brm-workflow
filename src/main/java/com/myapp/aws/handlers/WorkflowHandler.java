@@ -20,10 +20,12 @@ public class WorkflowHandler implements RequestHandler<APIGatewayProxyRequestEve
         LambdaLogger logger = context.getLogger();
         logger.log("CONTEXT: " + gson.toJson(context));
         logger.log("EVENT: " + gson.toJson(event));
-        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
+
         String httpMehod = event.getHttpMethod();
-        Map params = null;
         String path = event.getPath();
+        String s3_bucket_name = System.getenv("S3_BUCKET_NAME");
+
+        Map params = null;
         System.out.println("Path: " + path);
 
         if(httpMehod.equalsIgnoreCase("POST")){
@@ -35,8 +37,10 @@ public class WorkflowHandler implements RequestHandler<APIGatewayProxyRequestEve
             params = event.getQueryStringParameters();
         }
 
+        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
+
         if(params != null){
-            String responseJson = processRequest(path, params);
+            String responseJson = processRequest(s3_bucket_name, path, params);
             if(responseJson == null){
                 response.setStatusCode(404);
                 response.setBody("Unable to process request: Unknown endpoint");
@@ -58,14 +62,14 @@ public class WorkflowHandler implements RequestHandler<APIGatewayProxyRequestEve
         return response;
     }
 
-    private String processRequest(String path, Map params){
+    private String processRequest(String s3_bucket_name, String path, Map params){
         System.out.println("Processing requests with params: " + params);
         String responseJson = null;
         if(path != null) {
             path = path.substring(1, path.length());
             if (path.equalsIgnoreCase("getDecision")) {
                 WorkflowServiceImpl service = new WorkflowServiceImpl();
-                Map result = service.processRules(params);
+                Map result = service.processRules(s3_bucket_name, params);
 
                 responseJson = gson.toJson(result);
             }

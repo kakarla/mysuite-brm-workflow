@@ -11,7 +11,7 @@ public class WorkflowServiceTest extends AbstractTest{
         String filePath = "/Users/kk/Desktop/";
         String fileName = "MyExposures_ApprovalRules_QA.xls";
         S3Util s3Util = new S3Util();
-        s3Util.uploadRulesFile(filePath, fileName);
+        s3Util.uploadRulesFile("kkaws-brm-bucket", filePath, fileName);
         //System.out.println(user);
         //System.out.println(user.getRoles());
     }
@@ -20,7 +20,7 @@ public class WorkflowServiceTest extends AbstractTest{
     public void testGetRulesFile(){
         String fileName = "MyExposures_ApprovalRules_QA.xls";
         S3Util s3Util = new S3Util();
-        byte[] bytes = s3Util.getRulesFile(fileName);
+        byte[] bytes = s3Util.getRulesFile("kkaws-brm-bucket", fileName);
         System.out.println("Bytes size: " + bytes.length);
     }
 
@@ -31,11 +31,11 @@ public class WorkflowServiceTest extends AbstractTest{
         Map<String, String> mapa = new HashMap<String, String>();
         mapa.put("appName", "MyExposures");
         mapa.put("module", "ExpWFRules");
-        mapa.put("umbrella", "test");
-        mapa.put("notionalAmt", "100");
-        mapa.put("maturityBucket", "100");
+        mapa.put("umbrella", "GE Aviation");
+        mapa.put("notionalAmt", "99999");
+        mapa.put("maturityBucket", "99999");
 
-        Map<String, String> result = service.processRules(mapa);
-        System.out.println("Returned Search criteria: " +  result);
+        Map<String, String> result = service.processRules("kkaws-brm-bucket", mapa);
+        //System.out.println("Returned Search criteria: " +  result);
     }
 }
