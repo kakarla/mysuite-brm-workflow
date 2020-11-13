@@ -8,7 +8,7 @@ import java.util.Map;
 public class WorkflowServiceTest extends AbstractTest{
     @Test
     public void testFileUpload(){
-        String filePath = "/Users/kondaiahkakarla/Desktop/";
+        String filePath = "/Users/kk/Desktop/";
         String fileName = "MyExposures_ApprovalRules_QA.xls";
         S3Util s3Util = new S3Util();
         s3Util.uploadRulesFile(filePath, fileName);

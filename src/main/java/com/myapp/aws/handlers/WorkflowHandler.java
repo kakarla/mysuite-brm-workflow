@@ -18,6 +18,8 @@ public class WorkflowHandler implements RequestHandler<APIGatewayProxyRequestEve
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent event, Context context)  {
         LambdaLogger logger = context.getLogger();
+        logger.log("CONTEXT: " + gson.toJson(context));
+        logger.log("EVENT: " + gson.toJson(event));
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         String httpMehod = event.getHttpMethod();
         Map params = null;
@@ -57,6 +59,7 @@ public class WorkflowHandler implements RequestHandler<APIGatewayProxyRequestEve
     }
 
     private String processRequest(String path, Map params){
+        System.out.println("Processing requests with params: " + params);
         String responseJson = null;
         if(path != null) {
             path = path.substring(1, path.length());

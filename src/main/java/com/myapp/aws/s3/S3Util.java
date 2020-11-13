@@ -10,15 +10,18 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.ResponseHeaderOverrides;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
+import com.myapp.aws.workflow.WorkflowServiceImpl;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 public class S3Util {
-    private static String bucketName = "mysuite-brm-bucket";
+    private static String bucketName = "kkaws-brm-bucket";
     private static AmazonS3 s3 = AmazonS3ClientBuilder.standard()
             .withRegion(Regions.US_EAST_1)
             .build();;
@@ -26,15 +29,17 @@ public class S3Util {
     public static void main(String[] args) throws IOException {
         try {
 
-            //Upload file
-            //uploadRulesFile(bucketName, keyName, s3);
+            WorkflowServiceImpl service = new WorkflowServiceImpl();
 
-            //Get File versions
-            //getFileVersions(bucketName, keyName, s3);
+            Map<String, String> mapa = new HashMap<String, String>();
+            mapa.put("appName", "MyExposures");
+            mapa.put("module", "ExpWFRules");
+            mapa.put("umbrella", "test");
+            mapa.put("notionalAmt", "100");
+            mapa.put("maturityBucket", "100");
 
-            //Download file
-            //getRulesFile(bucketName, fileName);
-
+            Map<String, String> result = service.processRules(mapa);
+            System.out.println("Returned Search criteria: " +  result);
         } catch (AmazonServiceException e) {
             System.err.println(e.getErrorMessage());
             System.exit(1);
